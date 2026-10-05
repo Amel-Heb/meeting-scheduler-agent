@@ -60,3 +60,88 @@ Agent proposes options to the user
 - Understand tool orchestration
 - Understand decision flows
 - Understand how agents connect reasoning and action
+
+## Sprint Progress
+
+### Feature implemented
+
+The application entry point has been redesigned.
+
+Instead of directly calling the availability tool, all user requests are now routed through `SchedulerAgent`.
+
+---
+
+### Architecture decision
+
+**Before**
+
+app.py → check_availability()
+
+**After**
+
+app.py → SchedulerAgent → check_availability()
+
+---
+
+### Why?
+
+This change separates the application entry point from the business logic.
+
+`app.py` no longer needs to know which tool should be executed.
+
+The SchedulerAgent becomes responsible for:
+
+- understanding the request
+- selecting the appropriate tool
+- executing the tool
+- returning the result
+
+This architecture prepares the project for future tools such as:
+
+- create meeting
+- cancel meeting
+- reschedule meeting
+- Google Calendar
+
+## Milestone 1 — First Agent Orchestration
+
+### Goal
+
+Replace the direct tool invocation with an orchestration layer.
+
+---
+
+### Before
+
+app.py directly executed:
+
+check_availability("mardi")
+
+---
+
+### After
+
+The application now routes every user request through SchedulerAgent.
+
+The agent:
+
+1. Understands the request
+2. Detects the intent
+3. Selects the appropriate tool
+4. Executes the tool
+5. Returns a structured response
+
+---
+
+### Outcome
+
+The Meeting Scheduler is no longer a collection of independent tools.
+
+It now behaves as an orchestrated AI agent.
+
+This architectural evolution prepares the application for future capabilities such as:
+
+- Meeting creation
+- Meeting cancellation
+- Meeting rescheduling
+- Google Calendar integration

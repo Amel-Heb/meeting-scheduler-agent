@@ -1,9 +1,16 @@
-from pydantic import BaseModel 
-from typing import Optional 
+from pydantic import BaseModel
+from typing import Optional
 
-class meeting(BaseModel):
-    participant: str
-    date: str 
-    time_period: str
-    duration: int = 30 
-    topic: Optional[str] = None 
+
+class Meeting(BaseModel):
+    subject: Optional[str] = None
+    participants: list[str] = []
+    day: Optional[str] = None
+    time: Optional[str] = None
+    duration: Optional[int] = None
+    location: Optional[str] = None
+
+class MeetingRequest(BaseModel):
+    intent: str
+    entities: Meeting
+    

@@ -17,7 +17,9 @@ Il décide :
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict, Optional
+
+from models.llm import extract_meeting_request
 
 
 class SchedulerAgent:
@@ -25,22 +27,15 @@ class SchedulerAgent:
         self.tools = tools
 
     def understand_request(self, request: str) -> Dict[str, Any]:
-        """Interprète la demande utilisateur et renvoie l'intention et les entités."""
-        normalized = request.strip().lower()
+        """Interprète la demande utilisateur avec le LLM."""
 
-        if "annuler" in normalized or "supprimer" in normalized:
-            intent = "cancel_meeting"
-        elif "déplacer" in normalized or "reprogrammer" in normalized or "changer" in normalized:
-            intent = "reschedule_meeting"
-        elif "disponibilité" in normalized or "dispo" in normalized:
-            intent = "check_availability"
-        else:
-            intent = "schedule_meeting"
+        parsed = extract_meeting_request(request)
 
         return {
-            "intent": intent,
-            "entities": {},
+            "intent": parsed.intent,
+            "entities": parsed.entities.model_dump(),
         }
+
 
     def select_tool(self, intent: str) -> Optional[Any]:
         """Choisit le tool approprié en fonction de l'intention détectée."""
@@ -71,12 +66,39 @@ class SchedulerAgent:
     def handle(self, request: str) -> Dict[str, Any]:
         """Traite une demande et retourne le résultat du tool choisi."""
         parsed = self.understand_request(request)
+
+        if parsed["intent"] == "schedule_meeting":
+            required_fields = [
+                "subject",
+                "participants",
+                "day",
+                "time",
+                "duration",
+                "location",
+            ]
+
+            missing_fields = [
+                field
+                for field in required_fields
+                if not parsed["entities"].get(field)
+            ]
+
+            if missing_fields:
+                return {
+                    "request": request,
+                    "intent": parsed["intent"],
+                    "missing_fields": missing_fields,
+                    "result": None,
+                }
+
         tool = self.select_tool(parsed["intent"])
+
         payload = {
             "request": request,
             "intent": parsed["intent"],
             "entities": parsed["entities"],
         }
+
         result = self.execute_tool(tool, payload)
 
         return {
