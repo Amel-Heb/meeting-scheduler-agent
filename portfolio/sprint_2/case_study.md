@@ -144,4 +144,81 @@ Do not act   Select tool
                 ↓
              Execute
 
+## What Changed
+
+By the end of Sprint 2, the Meeting Scheduler had moved beyond a collection of tools.
+
+It could now:
+
+- understand a request expressed in natural language
+- translate that request into structured data
+- identify the user's intent
+- detect missing information
+- decide whether it had enough information to proceed
+- select the appropriate tool
+- execute the tool and return the result
+
+The most important evolution was not adding more actions.
+
+It was introducing a decision layer between what the user says and what the system does.
+
+## What Sprint 2 Revealed
+
+The agent can now recognize an incomplete request.
+
+But it cannot yet resolve one through conversation.
+
+For example:
+
+> Organise une réunion avec Léa mardi.
+
+The system knows that the subject, time, duration and location are missing.
+
+The next product question is no longer:
+
+> Can the agent understand what is missing?
+
+It is:
+
+> How should the agent ask for what is missing without making the interaction feel like a form?
+
+That question becomes the starting point for Sprint 3.
+
+## Next — Sprint 3: Conversation & Human Validation
+
+Sprint 3 will explore how the agent can progressively complete a request through dialogue.
+
+The goal is to design an agent that can:
+
+- remember what the user has already provided
+- ask only for information that is still missing
+- decide which question to ask next
+- build a complete request across multiple turns
+- present a proposed action before executing it
+- obtain explicit human confirmation before modifying the calendar
+
+The guiding principle will be:
+
+> **Ask only for what is missing. Never ask the user to repeat information already provided.**
+
+Sprint 2 taught the agent when not to act.
+
+Sprint 3 will explore what it should say and do next.
+
+Tools
+  ↓
+Understanding
+  ↓
+Orchestration
+  ↓
+"None" problem
+  ↓
+UX observation
+  ↓
+Behavioral rule
+  ↓
+Architectural change
+  ↓
+New question: how should the agent converse?
+
 

@@ -21,6 +21,26 @@ tools = {
 
 agent = create_scheduler_agent(tools)
 
+print("Mode de fonctionnement :")
+print("1 - Organiser une réunion (conversation)")
+print("2 - Mode classique Sprint 2")
+
+mode = input("Choix (1 ou 2) : ").strip()
+
+if mode == "1":
+    print("\nAgent : Décris la réunion que tu souhaites organiser.")
+
+    while agent.state.status not in ["confirmed", "cancelled"]:
+        user_message = input("\nVous : ")
+
+        response = agent.handle_conversation(user_message)
+
+        print(f"\nAgent : {response}")
+
+    print("\nAgent : Conversation terminée.")
+
+    raise SystemExit
+
 user_request = input("Vous : ")
 
 result = agent.handle(user_request)

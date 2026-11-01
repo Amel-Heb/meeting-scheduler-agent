@@ -32,6 +32,8 @@ Expected output:
     "participants": [],
     "day": null,
     "time": null,
+    "duration": null,
     "location": null
   }
 }
+
